@@ -1,5 +1,6 @@
 package com.project.Task.Managment.controller;
 
+import com.project.Task.Managment.DTO.RegistrationDto;
 import com.project.Task.Managment.entity.AuthRequest;
 import com.project.Task.Managment.entity.UserInfo;
 import com.project.Task.Managment.service.JwtService;
@@ -13,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -30,8 +31,14 @@ public class UserController {
         return "Welcome this endpoint is not secure";
     }
 
-    @PostMapping("/addNewUser")
-    public String addNewUser(@RequestBody UserInfo userInfo) {
+    @PostMapping("/register")
+    public String addNewUser(@RequestBody RegistrationDto registrationDto) {
+        UserInfo userInfo = new UserInfo(
+                registrationDto.getName(),
+                registrationDto.getEmail(),
+                registrationDto.getPassword(),
+                "USER"
+        );
         return service.addUser(userInfo);
     }
 
@@ -47,7 +54,7 @@ public class UserController {
         return "Welcome to Admin Profile";
     }
 
-    @PostMapping("/generateToken")
+    @PostMapping("/login")
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
