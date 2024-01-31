@@ -1,7 +1,9 @@
 package com.project.Task.Managment.service;
 
+
 import com.project.Task.Managment.entity.UserInfo;
 import com.project.Task.Managment.repository.UserInfoRepository;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,12 +27,14 @@ public class UserInfoService implements UserDetailsService {
 
         Optional<UserInfo> userDetail = repository.findByName(username);
 
-        // Converting userDetail to UserDetails
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
     public String addUser(UserInfo userInfo) {
+        if (repository.existsByName(userInfo.getName())){
+            throw new ValidationException("Username already taken");
+        }
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         repository.save(userInfo);
         return "User Added Successfully";

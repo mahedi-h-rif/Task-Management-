@@ -1,11 +1,16 @@
 package com.project.Task.Managment.controller;
 
 import com.project.Task.Managment.DTO.RegistrationDto;
+import com.project.Task.Managment.DTO.userWithoutPassWordDto;
 import com.project.Task.Managment.entity.AuthRequest;
 import com.project.Task.Managment.entity.UserInfo;
 import com.project.Task.Managment.service.JwtService;
 import com.project.Task.Managment.service.UserInfoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,14 +37,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String addNewUser(@RequestBody RegistrationDto registrationDto) {
+    public ResponseEntity<userWithoutPassWordDto> addNewUser(@RequestBody @Valid RegistrationDto registrationDto) {
         UserInfo userInfo = new UserInfo(
-                registrationDto.getName(),
+                registrationDto.getUserName(),
                 registrationDto.getEmail(),
                 registrationDto.getPassword(),
                 "USER"
         );
-        return service.addUser(userInfo);
+        userWithoutPassWordDto userWithoutPassWordDto =
+                new userWithoutPassWordDto(userInfo.getName(),userInfo.getEmail());
+        service.addUser(userInfo);
+        return new ResponseEntity<>(userWithoutPassWordDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/user/userProfile")
