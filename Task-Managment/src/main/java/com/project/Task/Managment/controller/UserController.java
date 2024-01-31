@@ -31,10 +31,6 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
 
     @PostMapping("/register")
     public ResponseEntity<userWithoutPassWordDto> addNewUser(@RequestBody @Valid RegistrationDto registrationDto) {

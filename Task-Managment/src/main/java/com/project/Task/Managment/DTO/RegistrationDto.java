@@ -15,15 +15,14 @@ import org.hibernate.validator.constraints.UniqueElements;
 @Setter
 public class RegistrationDto {
 
-    @NotNull(message = "username shouldn't be null")
-    @Column(unique = true)
+    @NotNull(message = "Username shouldn't be null.")
     private String userName;
-    @Email(message = "invalid email address")
+    @Email(message = "Invalid email address.")
     private String email;
-    @Size(min = 8, message = "Password must be at least 8 characters")
+    @Size(min = 8, message = "Password must be at least 8 characters.")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)" +
             "(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
             message = "Password must contain at least one lowercase letter," +
-                    " one uppercase letter, one digit, and one special character")
+            "one uppercase letter, one digit, and one special character")
     private String password;
 }

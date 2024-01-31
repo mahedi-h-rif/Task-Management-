@@ -36,11 +36,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/welcome", "/api/register", "/api/login").permitAll()
+                .requestMatchers("/api/register", "/api/login").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/api/user/**").authenticated()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/admin/**").authenticated()
+                .authorizeHttpRequests().requestMatchers("/api/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

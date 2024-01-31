@@ -41,4 +41,7 @@ public class UserInfoService implements UserDetailsService {
     }
 
 
+    public Optional<UserInfo> findUser(String username) {
+        return repository.findByName(username);
+    }
 }
