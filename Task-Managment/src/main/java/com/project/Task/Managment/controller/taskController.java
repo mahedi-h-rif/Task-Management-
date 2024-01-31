@@ -8,6 +8,10 @@ import com.project.Task.Managment.service.taskService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,7 +51,22 @@ public class taskController {
         return new ResponseEntity<>(taskDto, HttpStatus.CREATED);
     }
 
+    @GetMapping("/allTasks")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Page<TaskDto>> getAllTasks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @AuthenticationPrincipal UserDetails userDetails)
+    {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<TaskDto> taskDtos = taskService.getAllTasksDto(pageable);
 
+       return ResponseEntity.ok(taskDtos);
+    }
     @GetMapping("/tasks")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseEntity<List<TaskDto>> getAllTaskForUser(
