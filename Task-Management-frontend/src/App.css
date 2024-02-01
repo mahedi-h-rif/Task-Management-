@@ -1,0 +1,15 @@
+  *{
+   margin: 0px;
+   padding:0px;
+   text-decoration: none;
+}
+main{
+    width: 100%;
+    padding: 0px;
+}
+
+/* inline-block  rounded-full border-2 border-gray-500 text-gray-500 hover:border-gray-600 hover:bg-gray-400 hover:bg-opacity-10 hover:text-gray-600 focus:border-gray-700 focus:text-gray-700 active:border-gray-800 active:text-gray-800 dark:border-gray-300 dark:text-gray-300 dark:hover:hover:bg-gray-300 
+                            px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal 
+                            transition duration-150 
+                            ease-in-out focus:outline-none 
+                            focus:ring-0 */
