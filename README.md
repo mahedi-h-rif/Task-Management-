@@ -3,7 +3,7 @@
 
 A Spring Boot and React-based application allowing users to add, update, or delete tasks. Users can view their tasks, while administrators have access to all user tasks.
 
-### Entity Relation Diagrm:
+### Entity Relation Diagram:
 ![ER](https://github.com/mahedi-h-rif/Task-Management-/assets/136273197/ca41a593-03b3-4317-bd4d-81c5ab279943)
 
 ## Frontend Overview:
