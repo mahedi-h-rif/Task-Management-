@@ -8,11 +8,13 @@ const TaskList = () => {
   const [tasks, setTasks] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
   const [userRoles, setUserRoles] = useState([]);
+  const [showAddButton, setShowAddButton] = useState(false);
 
   const fetchUserRoles = async () => {
     try {
       const roles = await api.getUserRoles(authToken);
       setUserRoles(roles.split(',')); // Assuming roles are comma-separated
+      setShowAddButton(roles.includes('USER'));
     } catch (error) {
       // Handle error fetching user roles
     }
@@ -43,21 +45,25 @@ const TaskList = () => {
 
   const handleDeleteTask = async (taskId) => {
     try {
-      await api.deleteTask(taskId, authToken);
-      console.log('Task deleted:', taskId);
-      fetchTasks();
+        await api.deleteTask(taskId, authToken);
+        console.log('Task deleted:', taskId);
+        fetchTasks();
     } catch (error) {
-      // Handle error deleting task
+        console.error('Error deleting task:', error);
+        // Handle error deleting task (e.g., show a notification)
     }
+};
+
+
+  const handleUpdateTask = (taskId) => {
+    // Implement logic to show the update modal for the selected task
+    // You can create a separate UpdateTaskModal component and manage its state here
+    console.log('Update task:', taskId);
   };
 
   return (
     <>
-      <div className="flex gap-6">
-        <a className="inline-block px-12 py-3 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded active:text-blue-500 hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring" href="/create-tasks">
-          Add
-        </a>
-      </div>
+      
 
       <div className="max-w-sm mx-auto mt-16">
         <ul className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -72,15 +78,28 @@ const TaskList = () => {
                   <p className="text-sm font-medium text-gray-500">
                     Status: <span className={`text-${task.status === 'Active' ? 'green' : (task.status === 'Inactive' ? 'red' : 'yellow')}-600`}>{task.status}</span>
                   </p>
-                  {/* {userRoles.includes('ADMIN') && (
-                      )} */}
+                  {userRoles.includes('USER') && (
+                    <>
+                      <button onClick={() => handleUpdateTask(task.id)} className="font-medium text-indigo-600 hover:text-indigo-500">Update</button>
                       <button onClick={() => handleDeleteTask(task.id)} className="font-medium text-indigo-600 hover:text-indigo-500">Delete</button>
+                    </>
+                  )}
+                  {userRoles.includes('ADMIN') && (
+                    <button onClick={() => handleDeleteTask(task.id)} className="font-medium text-indigo-600 hover:text-indigo-500">Delete</button>
+                  )}
                 </div>
               </div>
             </li>
           ))}
         </ul>
       </div>
+      {showAddButton && (
+        <div className="flex gap-6 justify-end mr-80">
+          <a className="inline-block px-12 py-3 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded active:text-blue-500 hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring" href="/create-tasks">
+            Create
+          </a>
+        </div>
+      )}
     </>
   );
 };
