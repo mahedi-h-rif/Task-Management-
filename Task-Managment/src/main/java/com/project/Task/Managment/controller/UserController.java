@@ -20,6 +20,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.DELETE,
+        RequestMethod.PUT,
+        RequestMethod.OPTIONS})
 public class UserController {
 
     @Autowired
@@ -44,18 +49,6 @@ public class UserController {
                 new userWithoutPassWordDto(userInfo.getName(),userInfo.getEmail());
         service.addUser(userInfo);
         return new ResponseEntity<>(userWithoutPassWordDto, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/user/userProfile")
-    @PreAuthorize("hasAuthority('USER')")
-    public String userProfile() {
-        return "Welcome to User Profile";
-    }
-
-    @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String adminProfile() {
-        return "Welcome to Admin Profile";
     }
 
     @PostMapping("/login")

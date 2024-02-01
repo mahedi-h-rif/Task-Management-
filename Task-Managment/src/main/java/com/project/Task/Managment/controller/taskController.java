@@ -23,8 +23,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.DELETE,
+        RequestMethod.PUT,
+        RequestMethod.OPTIONS})
 public class taskController {
 
     private final taskService  taskService;
@@ -43,7 +49,7 @@ public class taskController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         Optional<UserInfo> userInfo = userInfoService.findUser(userDetails.getUsername());
-
+        task.setUserInfo(userInfo.get());
         taskService.saveTask(task);
         task.setUserInfo(userInfo.get());
         TaskDto taskDto = new TaskDto(task.getId(),task.getTitle(),
@@ -67,6 +73,8 @@ public class taskController {
 
        return ResponseEntity.ok(taskDtos);
     }
+
+
     @GetMapping("/tasks")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseEntity<List<TaskDto>> getAllTaskForUser(

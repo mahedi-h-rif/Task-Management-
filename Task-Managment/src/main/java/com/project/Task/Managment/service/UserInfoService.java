@@ -35,6 +35,9 @@ public class UserInfoService implements UserDetailsService {
         if (repository.existsByName(userInfo.getName())){
             throw new ValidationException("Username already taken");
         }
+        if(repository.existsByEmail(userInfo.getEmail())){
+            throw new ValidationException("Email already taken.");
+        }
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         repository.save(userInfo);
         return "User Added Successfully";
